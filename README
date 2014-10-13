@@ -1,23 +1,28 @@
-The Perl Application Framework
-Copyright Chris Williams 1996-2014 (unless otherwise specified in the preamble of each file)
-
+====================================
+|   A Perl Application Framework   |
+|         by Chris Williams        |
+====================================
 
 Welcome to the Perl Application Framework
 =========================================
-This represents a collection of useful libraries & utilities I have developed over the years.
-The purpose is to speed up my own perl application development by providing a standarised way
-of generating apps that keeps me happy. 
+This represents a collection of useful libraries & utilities 
+I have developed over the years.
+The purpose is to speed up my own perl application development by providing
+ a standarised way of generating command line apps that keeps me happy. 
 
-I'm sure a lot of this stuff could be superceeded by supported CPAN modules, but they probably didn't
-exist, they were to immature or I was simply not aware of then when I was writing this stuff and so I
-developed my own solution.  There are unit tests galore (and even a rudimentry unit test framework), but
+I'm sure a lot of this stuff could be superceeded by supported CPAN modules,
+but they probably didn't exist, they were to immature, or I was simply 
+not aware of them.
+
+There are unit tests galore (and even a rudimentry unit test framework), but
 but I'm pretty sure code coverage is far from complete.
 
 Feel free to use as you need. GPL v2.0 licence applies.
 
 CPAN modules Required
 =====================
-CPAN is perls package manager. You will need to install the following modules to use PAF:
+CPAN is perls package manager. 
+You will need to install the following modules to use PAF:
 
 File::Sync
 File::Path
@@ -26,5 +31,9 @@ LWP::UserAgent
 Mozilla::CA
 
 e.g. 
-
 cpan install Mozilla::CA
+
+Copyright
+=========
+Copyright Chris Williams 1996-2014 
+(except where otherwise specified)
