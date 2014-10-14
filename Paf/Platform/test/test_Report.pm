@@ -6,6 +6,8 @@
 
 package test_Report;
 use Paf::Platform::Report;
+use Paf::Configuration::XmlWriter;
+use Paf::Configuration::Node;
 use Carp;
 use warnings;
 use strict;
@@ -19,7 +21,7 @@ sub new {
 }
 
 sub tests {
-    return qw(test_equal test_serialize);
+    return qw(test_equal test_serialize test_store);
 }
 
 sub test_equal {
@@ -36,6 +38,23 @@ sub test_equal {
     print $report->equal($report4),"\n";
     die("not expecting equality"), if( $report->equal($report4) != 0 );
     die("not expecting equality"), if( $report4->equal($report) != 0 );
+}
+
+sub test_store {
+    my $self=shift;
+    my $report=$self->create_report();
+    my $node=Paf::Configuration::Node->new("Report");
+    $report->store($node);
+
+    my $report2=Paf::Platform::Report->new();
+    $report2->restore($node);
+    if( ! $report->equal($report2) ) {
+        Paf::Configuration::XmlWriter::dump($node);
+        my $node2=Paf::Configuration::Node->new("Report");
+        $report2->store($node2);
+        Paf::Configuration::XmlWriter::dump($node2);
+        die("expecting the same report back");
+    }
 }
 
 sub test_serialize {

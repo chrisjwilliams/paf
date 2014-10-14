@@ -12,6 +12,7 @@
 package Paf::Platform::Report;
 use IO::Tee;
 use Paf::Configuration::IniFile;
+use Paf::Configuration::NodeFilter;
 use Carp;
 use strict;
 1;
@@ -180,6 +181,55 @@ sub equal {
 }
 
 # -- persistency
+
+#
+# store into a provided Node object
+#
+sub store {
+    my $self=shift;
+    my $root=shift||die "no Node provided";
+
+    for( my $index=0; $index <= $#{$self->{executed}}; $index++ ) {
+        my $context=$self->{executed}[$index];
+        my $cmd=$context->{cmd};
+        my $context_node=$root->new_child("context", { cmd => $cmd } );
+
+        foreach my $key ( keys %$context ) {
+            next, if $key eq "cmd";
+            my $val=$context->{$key};
+            if(ref($val) eq "ARRAY" ) {
+                my $node=$context_node->new_child("array", { index => $index, name => $key });
+                $node->add_content(@$val);
+                next;
+            }
+            my $node=$context_node->new_child("var", { name => $key, value => $context->{$key} });
+        }
+    }
+}
+
+# restore from a Node object
+sub restore {
+    my $self=shift;
+    my $node=shift||return;
+
+    foreach my $section ( $node->search(new Paf::Configuration::NodeFilter("context")) ) {
+        my $cmd=$section->meta()->{"cmd"};
+        $self->new_context($cmd), if ($cmd ne "");
+        foreach my $var ( $section->search(new Paf::Configuration::NodeFilter("var")) ) {
+            my $name=$var->meta()->{name};
+            my $value=$var->meta()->{value};
+            $self->{current_context}->{$name}=$value;
+            if( $name eq "result" && $value ne "0" ) {
+                push @{$self->{failed}}, $#{$self->{executed}}; 
+            }
+        }
+        foreach my $array_node ( $section->search(new Paf::Configuration::NodeFilter("array")) ) {
+            my $index=$array_node->meta()->{index};
+            my $name=$array_node->meta()->{name};
+            @{$self->{executed}[$index]->{$name}}=@{$array_node->content()};
+        }
+    }
+}
 
 sub serialize {
     my $self=shift;
