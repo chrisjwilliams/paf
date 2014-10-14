@@ -33,6 +33,11 @@ sub add {
     push @{$self->{steps}}, @_;
 }
 
+sub list {
+    my $self=shift;
+    return $self->{steps}; # n.b return an array ref
+}
+
 sub execute {
     my $self=shift;
     my $report=shift;
