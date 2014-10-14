@@ -8,7 +8,17 @@ Welcome to the Perl Application Framework
 This represents a collection of useful libraries & utilities 
 I have developed over the years.
 The purpose is to speed up my own perl application development by providing
- a standarised way of generating command line apps that keeps me happy. 
+a standarised way of generating command line apps that keeps me happy. 
+
+Features include:
+
+   - Command line parsing
+   - Configuration file handling (XML and INI parsers)
+   - Plugin Factory
+   - Directory Iteratiors
+   - Remote host Execution
+   - Rudimetry Object Store
+   - Download Cache
 
 I'm sure a lot of this stuff could be superceeded by supported CPAN modules,
 but they probably didn't exist, they were to immature, or I was simply 
