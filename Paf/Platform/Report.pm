@@ -235,47 +235,21 @@ sub serialize {
     my $self=shift;
     my $fh=shift;
 
-    my $ini=Paf::Configuration::IniFile->new();
-    for( my $index=0; $index <= $#{$self->{executed}}; $index++ ) {
-        my $context=$self->{executed}[$index];
-        foreach my $key ( keys %$context ) {
-            my $val=$context->{$key};
-            if(ref($val) eq "ARRAY" ) {
-                $ini->setList("context_array::".$index."::$key", @$val);
-                next;
-            }
-            $ini->setVar("context::$index", $key, $context->{$key});
-        }
-    }
-    $ini->_save($fh);
+    my $writer=Paf::Configuration::XmlWriter->new();
+    my $node=Paf::Configuration::Node->new("Report");
+    $self->store($node);
+    $writer->write($node, $fh);
+    $writer->write($node);
 }
 
 sub deserialize {
     my $self=shift;
     my $fh=shift;
 
-    my $ini=Paf::Configuration::IniFile->new();
-    $ini->readStream($fh);
-    $self->reset();
-    @{$self->{executed}}=();
-
-    foreach my $section ( $ini->sections("context::*") ) {
-        my $cmd=$ini->var($section, "cmd");
-        $cmd = "", if ($cmd eq "\"\"");
-        $self->new_context($cmd);
-        my $context=$self->current_context();
-        $context = $ini->section($section);
-        if( $context->{result} ) {
-            push @{$self->{failed}}, $#{$self->{executed}}; 
-        }
-        foreach my $key ( keys %$context ) {
-            next, if ($key eq "cmd");
-            $self->{current_context}->{$key}=$context->{$key};
-        }
-    }
-    
-    foreach my $section ( $ini->sections("context_array::*") ) {
-        (my $id, my $name)=($section=~/context_array::(.+)::(.*)/);    
-        @{$self->{executed}[$id]->{$name}}=$ini->list($section);
-    }
+    require Paf::Configuration::XmlParser;
+    my $reader=Paf::Configuration::XmlParser->new();
+    my $node=$reader->parse($fh);
+    $node=$node->get_child(new Paf::Configuration::NodeFilter("Report")), if(! defined $node->name());
+    Paf::Configuration::XmlWriter::dump($node);
+    $self->restore($node);
 }
