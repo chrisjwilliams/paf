@@ -239,7 +239,6 @@ sub serialize {
     my $node=Paf::Configuration::Node->new("Report");
     $self->store($node);
     $writer->write($node, $fh);
-    $writer->write($node);
 }
 
 sub deserialize {
@@ -250,6 +249,5 @@ sub deserialize {
     my $reader=Paf::Configuration::XmlParser->new();
     my $node=$reader->parse($fh);
     $node=$node->get_child(new Paf::Configuration::NodeFilter("Report")), if(! defined $node->name());
-    Paf::Configuration::XmlWriter::dump($node);
     $self->restore($node);
 }
