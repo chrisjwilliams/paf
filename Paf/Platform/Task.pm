@@ -41,9 +41,11 @@ sub list {
 sub execute {
     my $self=shift;
     my $report=shift;
+    my $verbose=shift||0;
 
     my $rv;
     foreach my $step ( @{$self->{steps}} ) {
+        print "$step\n", if ( $verbose );
         $report->new_context($step);
         eval { $self->{platform}->execute($step, $report); };
         if(@_) {

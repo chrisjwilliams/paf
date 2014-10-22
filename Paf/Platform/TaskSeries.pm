@@ -81,12 +81,14 @@ sub create_report {
 sub execute {
     my $self=shift;
     my $stop_task=shift;
+    my $verbose=shift||0;
 
     foreach my $key ( @{$self->{task_list}} ) {
         if(! defined $self->{reports}{$key} || $self->{reports}{$key}->has_failed() ) {
             # -- task needs to be executed
             $self->{reports}{$key}=$self->create_report($key);
             my $task=$self->{tasks}{$key};
+            print "executing task $key", if ( $verbose );
             my $report=$task->execute($self->{reports}{$key});
             if($report->has_failed()) {
                 return $report;
