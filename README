@@ -32,16 +32,12 @@ Feel free to use as you need. GPL v2.0 licence applies.
 CPAN modules Required
 =====================
 CPAN is perls package manager. 
-You will need to install the following modules to use PAF:
+You will need to install the modules defined in the cpan_dependencies file.
+There are many ways to do this, e.g. system pacakges, or you can use cpan itself.
 
-File::Sync
-File::Path
-File::Spec
-LWP::UserAgent
-Mozilla::CA
+e.g. from the comamnd line:
+sudo cpan install < cpan_dependencies
 
-e.g. 
-cpan install Mozilla::CA
 
 Copyright
 =========
