@@ -88,8 +88,8 @@ sub execute {
             # -- task needs to be executed
             $self->{reports}{$key}=$self->create_report($key);
             my $task=$self->{tasks}{$key};
-            print "executing task $key", if ( $verbose );
-            my $report=$task->execute($self->{reports}{$key});
+            print "executing task $key\n", if ( $verbose );
+            my $report=$task->execute($self->{reports}{$key}, $verbose);
             if($report->has_failed()) {
                 return $report;
             }
