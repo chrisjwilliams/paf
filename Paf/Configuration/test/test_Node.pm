@@ -24,7 +24,7 @@ sub new {
 }
 
 sub tests {
-    return qw(test_node_init test_search_node);
+    return qw(test_node_init test_search_node test_remove_child);
 }
 
 sub test_search_node {
@@ -89,4 +89,28 @@ sub test_node_init {
     die "content expected got $string", unless($string eq "line1,line2\n");
     $node->clear_content();
     die "no content expected", if(scalar @{$node->content()});
+}
+
+sub test_remove_child {
+    my $self=shift;
+
+    my $root=Paf::Configuration::Node->new();
+    my $level1a=$root->new_child("level_1");
+    my $level1b=$root->new_child("level_1");
+    my $level1c=$root->new_child("level_1");
+
+    die ("expected 3 children - got ", scalar $root->children()), if($root->children() != 3);
+    $root->remove_child($level1b);
+    $level1b->unhook(); # should be a noop as already removed
+    my @children=$root->children();
+    die("exepcting level1a"), unless ( $children[0] == $level1a );
+    die("exepcting level1a"), unless ( $children[1] == $level1c );
+
+    $level1c->unhook();
+    die ("expected 1 child - got ", scalar $root->children()), if(scalar $root->children() != 1);
+    @children=$root->children();
+    die("exepcting level1a"), unless ( $children[0] == $level1a );
+
+    $root->remove_child($level1a);
+    die "no children expected", if($root->children());
 }

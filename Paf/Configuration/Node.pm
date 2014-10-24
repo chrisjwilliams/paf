@@ -139,6 +139,27 @@ sub get_child {
     return $self->new_child($filter->name(), $filter->meta());
 }
 
+#
+# remove a child from the node
+#
+sub remove_child {
+    my $self=shift;
+    my $child_node=shift || die "no child node specified";
+
+    @{$self->{children}} = grep { $_ != $child_node } @{$self->{children}};
+}
+
+#
+#  unhook this node from its parent
+#
+sub unhook {
+    my $self=shift;
+    if( $self->{parent} ) {
+        $self->{parent}->remove_child($self);
+        $self->{parent}=undef;
+    }
+}
+
 # -- private methods -------------------------
 sub _search_node {
     my $self=shift;
