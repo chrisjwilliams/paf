@@ -68,7 +68,12 @@ sub write {
 
     # dump out any children
     foreach my $child ( $node->children() ) {
-        $self->write($child, $stream, $indent + 1);
+        if( $node->name() ) {
+            $self->write($child, $stream, $indent + 1);
+        }
+        else {
+            $self->write($child, $stream, $indent);
+        }
     }
 
     # end tag
