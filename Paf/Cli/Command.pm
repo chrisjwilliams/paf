@@ -126,9 +126,17 @@ sub usage {
     }
     print "\n";
     print "\nWhere:\n";
-    foreach my $arg ( $self->arguments() )
-    {
-        print "\t", $arg->name(), "\t", (join( "\n\t\t", $arg->synopsis())), ($arg->optional()?"(optional)\n":"\n");
+    if( $self->arguments() ) {
+        my $max_arg_length=0;
+        foreach my $arg ( $self->arguments() )
+        {
+            my $l = length $arg->name();
+            $max_arg_length = $l, if( $max_arg_length < $l );
+        }
+        my $tabstop=$max_arg_length + 2;
+        foreach my $arg ( $self->arguments() ) {
+            print "\t", $arg->name(), ' ' x ($tabstop - length $arg->name()), (join( ("\n\t".(" " x $tabstop)), $arg->synopsis())), ($arg->optional()?" (optional)\n":"\n");
+        }
     }
     print "\nSub Commands:\n";
     print "\thelp\n";
