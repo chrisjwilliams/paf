@@ -137,7 +137,7 @@ sub usage {
         }
         my $tabstop=$max_arg_length + 2;
         foreach my $arg ( $self->arguments() ) {
-            print "\t", $arg->name(), ' ' x ($tabstop - length $arg->name()), (join( ("\n\t".(" " x $tabstop)), $arg->synopsis())), ($arg->optional()?" (optional)\n":"\n");
+            print "\t", $arg->name(), ' ' x ($tabstop -2 - length $arg->name()), ": ", (join( ("\n\t".(" " x $tabstop)), $arg->synopsis())), ($arg->optional()?" (optional)\n":"\n");
         }
     }
     if( $self->commands() ) {
