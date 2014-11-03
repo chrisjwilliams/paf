@@ -117,7 +117,9 @@ sub usage {
         print " ", $cmd_name;
         print " [".$cmd_name."_options]", if($obj->options());
     }
-    print " <command>";
+    if( $self->commands() ) {
+        print " <command>";
+    }
     foreach my $arg ( $self->arguments() )
     {
         print " [", if( $arg->optional() );
@@ -138,11 +140,13 @@ sub usage {
             print "\t", $arg->name(), ' ' x ($tabstop - length $arg->name()), (join( ("\n\t".(" " x $tabstop)), $arg->synopsis())), ($arg->optional()?" (optional)\n":"\n");
         }
     }
-    print "\nSub Commands:\n";
-    print "\thelp\n";
-    foreach my $cmd ( $self->commands() )
-    {
-        print "\t", $cmd->name(), "\n";
+    if( $self->commands() ) {
+        print "\nSub Commands:\n";
+        print "\thelp\n";
+        foreach my $cmd ( $self->commands() )
+        {
+            print "\t", $cmd->name(), "\n";
+        }
     }
     if( $self->options() )
     {
