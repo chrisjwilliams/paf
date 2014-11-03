@@ -62,6 +62,20 @@ sub options {
     return ();
 }
 
+sub add_argument {
+    my $self=shift;
+    push @{$self->{args}}, @_;
+}
+
+sub arguments {
+    my $self=shift;
+    if( defined $self->{args} )
+    {
+        return @{$self->{args}};
+    }
+    return ();
+}
+
 sub commands {
     my $self=shift;
     if( defined $self->{cmds} )
@@ -104,7 +118,18 @@ sub usage {
         print " [".$cmd_name."_options]", if($obj->options());
     }
     print " <command>";
+    foreach my $arg ( $self->arguments() )
+    {
+        print " [", if( $arg->optional() );
+        print " <", $arg->name(), ">";
+        print " ]", if( $arg->optional() );
+    }
     print "\n";
+    print "\nWhere:\n";
+    foreach my $arg ( $self->arguments() )
+    {
+        print "\t", $arg->name(), "\t", (join( "\n\t\t", $arg->synopsis())), ($arg->optional()?"(optional)\n":"\n");
+    }
     print "\nSub Commands:\n";
     print "\thelp\n";
     foreach my $cmd ( $self->commands() )
