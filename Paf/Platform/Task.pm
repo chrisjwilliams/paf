@@ -11,6 +11,7 @@
 
 package Paf::Platform::Task;
 use Paf::Platform::Report;
+use Paf::Platform::ShellEnvironment;
 use strict;
 1;
 
@@ -38,10 +39,21 @@ sub list {
     return $self->{steps}; # n.b return an array ref
 }
 
+sub runtime_environment {
+    my $self=shift;
+    if(@_) {
+        $self->{env}=shift;
+    }
+    return $self->{env};
+}
+
 sub execute {
     my $self=shift;
     my $report=shift;
     my $verbose=shift||0;
+
+    # set runtime environment
+    my $runtime_env=new Paf::Platform::ShellEnvironment($self->{env});
 
     my $rv;
     foreach my $step ( @{$self->{steps}} ) {
