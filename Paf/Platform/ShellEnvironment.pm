@@ -32,6 +32,10 @@ sub new {
     foreach my $key ( keys %{$self->{set}} ) {
         if( defined $ENV{$key} ) {
            $self->{saved}{$key}=$ENV{$key}; 
+           # is it self referential e.g. PATH=/my/path:${PATH}
+           while($self->{set}{$key}=~/(.*?)\$\{\Q$key\E\}(.*?)/) {
+               $self->{set}{$key}=$1.$ENV{$key}.$2; 
+           }
         }
         # set the env variable
         $ENV{$key}=$self->{set}{$key}; 
@@ -46,7 +50,7 @@ sub _restore {
     my $self=shift;
     foreach my $key ( keys %{$self->{set}} ) {
         if( defined $self->{saved}{$key} ) {
-            $ENV{$key}=$self->{saved};
+            $ENV{$key}=$self->{saved}{$key};
         }
         else {
             delete $ENV{$key};

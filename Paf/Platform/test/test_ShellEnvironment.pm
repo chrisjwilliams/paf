@@ -27,6 +27,7 @@ sub test_env {
 
     my $e1_name="Test_EnvironemntVariableName1";
     my $e1_value="Test_EnvironemntValue1";
+    my $e1_value_2="some_new_value";
     my $e2_name="Test_EnvironemntVariableName2";
     my $e2_value="Test_EnvironemntValue2";
 
@@ -43,15 +44,26 @@ sub test_env {
         my $hash = { $e1_name => $e1_value };
         my $e = new Paf::Platform::ShellEnvironment( $hash );
         die("expecting defined env variable $e1_name"), unless defined $ENV{$e1_name};
-        die("expecting env variable $e1_name == $e1_value"), unless $ENV{$e1_name} eq $e1_value;
+        die("expecting env variable $e1_name == $e1_value got ", $ENV{$e1_name}), unless $ENV{$e1_name} eq $e1_value;
     }
     die("not expecting defined env variable $e1_name"), if defined $ENV{$e1_name};
+
+    # envreferencing env passed
+    {
+        $ENV{$e1_name}=$e1_value;
+        my $hash = { $e1_name => $e1_value_2."\${$e1_name}" };
+        my $e = new Paf::Platform::ShellEnvironment( $hash );
+        die("expecting defined env variable $e1_name"), unless defined $ENV{$e1_name};
+        die("expecting env variable $e1_name == $e1_value_2$e1_value got ", $ENV{$e1_name}), unless $ENV{$e1_name} eq $e1_value_2.$e1_value;
+    }
+    die("expecting defined env variable $e1_name"), unless defined $ENV{$e1_name};
+    die("expecting env variable $e1_name == $e1_value got ", $ENV{$e1_name}), unless $ENV{$e1_name} eq $e1_value;
+    delete $ENV{$e1_name};
 
     # stacked envs
     {
         my $hash1 = { $e1_name => $e1_value };
         my $hash2 = { $e2_name => $e2_value };
-        my $e1_value_2="some_new_value";
         my $hash3 = { $e1_name => $e1_value_2, $e2_name => $e2_value };
         my $e = new Paf::Platform::ShellEnvironment( $hash1 );
         {
