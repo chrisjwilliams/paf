@@ -44,7 +44,7 @@ sub parse {
         my @args=@_;
         my $config_file;
         my @filtered=();
-        while($args[0]=~/--/) 
+        while(defined $args[0] && $args[0]=~/--/) 
         {
             my $arg=shift @args;
             if($arg eq "--config") {
