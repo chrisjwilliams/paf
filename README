@@ -36,7 +36,7 @@ You will need to install the modules defined in the cpan_dependencies file.
 There are many ways to do this, e.g. system pacakges, or you can use cpan itself.
 
 e.g. from the comamnd line:
-sudo cpan install < cpan_dependencies
+sudo cpan < cpan_dependencies
 
 
 Copyright
