@@ -43,15 +43,13 @@ sub filter {
     my $self=shift;
     my $node=shift;
 
-    if($node) {
-        if( ! $self->{name} || $self->{name} eq "" || (defined $node->name() && $node->name() eq $self->{name}) ) {
-            # check the meta matches
-            my $meta=$node->meta();
-            foreach my $key ( keys %{$self->{meta}} ) {
-               return 0, unless (defined $meta->{$key} && $meta->{$key} eq $self->{meta}{$key});
-            }
-            return 1;
+    if( ! $self->{name} || $self->{name} eq "" || (defined $node && defined $node->name() && $node->name() eq $self->{name}) ) {
+        # check the meta matches
+        my $meta=$node->meta();
+        foreach my $key ( keys %{$self->{meta}} ) {
+            return 0, unless (defined $meta->{$key} && $meta->{$key} eq $self->{meta}{$key});
         }
+        return 1;
     }
     return 0;
 }
