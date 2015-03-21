@@ -22,23 +22,23 @@ use strict;
 # -- initialisation
 
 sub new {
-	my $class=shift;
+    my $class=shift;
     my $location=shift || die "cache requires a location";
 
     if( ! -d $location ) {
         mkdir $location or die "unable to make dir $location";
     }
 
-	my $self={};
-	bless $self, $class;
+    my $self={};
+    bless $self, $class;
     $self->{location}=$location;
-    
+
     $self->{agent}=LWP::UserAgent->new();
 
     # -- default turn of ssl verification
     # $self->{agent}->ssl_opts( { verify_hostname => 0, SSL_verify_mode => 0x00 } );
 
-	return $self;
+    return $self;
 }
 
 sub agent {
@@ -53,7 +53,9 @@ sub get {
 
     (my $f, my $dirname)=fileparse($filename);
 
-    File::Path::mkpath $dirname or die "unable to make directory $dirname: $!";
+    if( ! -d $dirname ) {
+        File::Path::mkpath $dirname or die "unable to make directory $dirname: $!";
+    }
 
     if( ! -f $filename ) {
         # -- download the uri resource (modified from https://metacpan.org/pod/lwpcook)

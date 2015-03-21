@@ -17,6 +17,7 @@ use FileHandle;
 use File::Basename;
 use Paf::File::DirIterator;
 use Cwd;
+use Config;
 1;
 
 sub new {
@@ -25,7 +26,7 @@ sub new {
     bless $self, $class;
     foreach my $path ( @_ ) {
         if( defined $path && $path ne "" ) {
-            $self->add( split (/:/, $path) );
+            $self->add( split (/$Config{path_sep}/, $path) );
         }
     }
     return $self;
@@ -36,7 +37,7 @@ sub add {
     foreach my $dir ( @_ ) {
         # expand relative paths
         my $tmp=$dir;
-        if( $dir!~/^[\\\/].*/ ) {
+        if(!File::Spec->file_name_is_absolute($dir)) {
             my $cwd=getcwd();
             $tmp=$cwd."/$dir";
         }
@@ -130,7 +131,7 @@ sub paths {
 sub cleanPath {
     my $dir=shift;
     # expand relative paths
-    if( $dir!~/^[\\\/].*/ ) {
+    if(!File::Spec->file_name_is_absolute($dir)) {
         $dir=getcwd()."/".$dir;
     }
     # eliminate .. from the path
