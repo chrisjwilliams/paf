@@ -10,7 +10,7 @@
 # -----------------------------------------------
 # Interface
 # ---------
-# new("uniqued_store_id")	: new object
+# new("uniqued_store_id")    : new object
 #
 
 package Paf::DataStore::DataStore;
@@ -21,14 +21,14 @@ use Carp;
 # -- initialisation
 
 sub new {
-	my $class=shift;
+    my $class=shift;
 
-	my $self={};
-	bless $self, $class;
+    my $self={};
+    bless $self, $class;
     $self->{id}=shift || carp "Data store needs a unique identifier";
 
     $self->{id}=$class."_".$self->{id};
-	return $self;
+    return $self;
 }
 
 sub id {

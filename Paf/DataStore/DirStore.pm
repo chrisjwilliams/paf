@@ -21,15 +21,15 @@ use strict;
 # -- initialisation
 
 sub new {
-	my $class=shift;
+    my $class=shift;
     my $location=shift || carp ("DirStore constructed without a location");;
-	my $self=$class->SUPER::new($location);
+    my $self=$class->SUPER::new($location);
     
     $self->{dir}=$location;;
     push @{$self->{schema}}, @_;
 
-	bless $self, $class;
-	return $self;
+    bless $self, $class;
+    return $self;
 }
 
 sub find {

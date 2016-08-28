@@ -17,9 +17,9 @@ use strict;
 # -- initialisation
 
 sub new {
-	my $class=shift;
+    my $class=shift;
     my $self=$class->SUPER::new(@_);
-	return $self;
+    return $self;
 }
 
 # -- private methods -------------------------
