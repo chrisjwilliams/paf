@@ -23,7 +23,7 @@ sub new {
 	bless $self, $class;
 
     my $base_dir=shift || File::Spec->tmpdir();
-    $self->{cleanup}=shift || 0;
+    $self->{cleanup}=shift || 1;
 
     $self->{dir}=$base_dir."/paf_tmp_$$";
     my $count=1;
