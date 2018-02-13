@@ -68,7 +68,7 @@ sub reload {
     $self->{root}->reset();
     if( -f $self->{filename} ) {
         my $filename=$self->{filename};
-        $self->verbose("reading from $filename");
+        $self->verbose("reading XML from $filename");
         my $fh=FileHandle->new("<".$filename) or die "unable to open $filename : $!";
         my $node=$self->{parser}->parse($fh, $self->{root});
         if( !defined $node ) {
