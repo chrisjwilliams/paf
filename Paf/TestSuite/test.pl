@@ -6,9 +6,11 @@
 # each module must have a tests() method to instruct the launcher
 # of the methods to call for each test
 #
+use FindBin;
+use lib "$FindBin::RealBin/../..";
+
 use strict;
-use Cwd;
 use TestSuite::TestLaunch;
 
-my $tests=TestSuite::TestLaunch->new(getcwd());
+my $tests=TestSuite::TestLaunch->new($FindBin::RealBin);
 exit $tests->run(@ARGV);

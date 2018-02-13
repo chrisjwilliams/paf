@@ -63,12 +63,12 @@ sub run {
     if( ! defined $_[0] )
     {
         # test everything
-        my $avail=$self->listTests();
+        my $avail=$self->list_tests();
         if( defined $avail )
         {
             foreach my $t ( keys %{$avail} )
             {
-                $self->runtest($t);
+                $self->run_test($t);
             }
         }
         else {
@@ -77,13 +77,13 @@ sub run {
     }
     else {
         # --- test selection
-        $self->runtest(@_);
+        $self->run_test(@_);
     }
     print "Total tests run : ",$self->{run}, "\n", "Failed: ", $self->{fail}, "\n", "Passed: ", $self->{pass}, "\n";
     return $self->{fail};
 }
 
-sub listTests {
+sub list_tests {
     my $self=shift;
     if( ! keys %{$self->{tests}} )
     {
@@ -104,15 +104,15 @@ sub listTests {
     return $self->{tests};
 }
 
-sub runtest {
+sub run_test {
     my $self=shift;
     my $test=shift;
 
-    $self->listTests();
+    $self->list_tests();
     if( exists $self->{tests}{$test} )
     {
         if( ! defined  $self->{testers}{$test} ) {
-            require $self->{tests}{$test};
+            require "$self->{loc}/$self->{tests}{$test}";
             my $tdir=$self->{tmpdir}."/".$test;
             mkdir $tdir or die ( "unable to create $tdir : $!\n");
             my $obj=$test->new( $self->{testConfigDir}, $tdir );
@@ -121,7 +121,7 @@ sub runtest {
         foreach my $t ( $self->{testers}{$test}->tests() )
         {
             $self->{run}++;
-            $self->_runtest($self->{testers}{$test},$t, $test);
+            $self->_run_test($self->{testers}{$test},$t, $test);
         }
     }
 }
@@ -135,7 +135,7 @@ sub DESTROY {
     rmtree( $self->{tmpdir} );
 }
 
-sub _runtest {
+sub _run_test {
     my $self=shift;
     my $tester=shift;
     my $method=shift;
