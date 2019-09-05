@@ -53,6 +53,7 @@ sub value {
 
 sub serialize {
     my $self=shift;
+    $Storable::canonical;
     my $string=uri_escape(nfreeze $self);
     return $string;
 }
