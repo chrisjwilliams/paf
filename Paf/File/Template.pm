@@ -3,6 +3,7 @@
 # -----------------------------------------------
 # Description: 
 #   Use a template file to generate output, subsitituting set variables
+#   Inside the template variables should be marked with {{ variable_name }}
 #
 # Interface:
 # new(filename) : create a new Template object based on a template file provided
